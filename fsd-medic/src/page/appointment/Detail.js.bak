@@ -1,0 +1,29 @@
+import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import Axios from "axios";
+import config from "../../config/Config";
+
+function Detail() {
+    const { id } = useParams();
+    const PATH = config().path;
+    const [appointment, setAppointment] = useState([]);
+    
+    useEffect(() => {
+        Axios.get(PATH + "/appointment/Details?id="+id).then((response) => {
+            setAppointment(response.data.obj);
+        });
+    }, []);
+
+    return (
+        <>
+            <h1>Detail</h1>
+            <p>{appointment.id}</p>
+            <p>{appointment.department_id}</p>
+            <p>{appointment.doctor_id}</p>
+            <p>{appointment.patient_id}</p>
+            <p>{appointment.doctor_time_id}</p>
+            <p>{appointment.status}</p>
+        </>
+    );
+}
+export default Detail;
