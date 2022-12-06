@@ -1,0 +1,63 @@
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import { Button } from "react-bootstrap";
+
+import Axios from "axios";
+import config from "../../config/Config";
+
+function Appoinment() {
+
+    const PATH = config().path;
+    const [list, setList] = useState([]);
+    
+    useEffect(() => {
+        Axios.get(PATH + "/appointment").then((response) => {
+            setList(response.data);
+        });
+    }, []);
+
+    function btn_del(id){
+        Axios.get(PATH + "/appointment/delete?id=" + id).then((rs) => {
+        });
+        window.location.reload();
+    };
+
+    return (
+        <>
+            <h1>Appoinment</h1>
+
+            <table>
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Department ID</th>
+                    <th>Doctor ID</th>
+                    <th>Patient ID</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th> </th>
+                </tr>
+                </thead>
+                <tbody>
+                {list.map((item, key) => (
+                    <tr key={item.id}>
+                        <td>{item.id}</td>
+                        <td>{item.department_id}</td>
+                        <td>{item.doctor_id}</td>
+                        <td>{item.patient_id}</td>
+                        <td>{item.date_on}</td>
+                        <td>{item.doctor_time_id}</td>
+                        <td>
+                            <Link to={`/appointment/detail/${item.id}`}> Edit </Link>   
+                            <Link type="button" onClick={()=>btn_del(item.id)}> Delete </Link>
+                        </td>
+                    </tr>
+                ))}
+                </tbody>
+            </table>
+
+
+        </>
+    );
+}
+export default Appoinment;
